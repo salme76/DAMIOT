@@ -1,0 +1,14 @@
+# Archivo de configuración con credenciales reales
+config.h
+
+# Archivos temporales de Arduino IDE
+*.hex
+*.elf
+*.bin
+*.map
+
+# Carpetas de compilación
+build/
+*.ino.bin
+*.ino.elf
+*.ino.map
