@@ -1,6 +1,3 @@
-# Ignorar datos reales del dispositivo
-04_real_device.sql
-
 # Ignorar backups
 *.sql.backup
 backup_*.sql
