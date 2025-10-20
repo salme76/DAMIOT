@@ -1,42 +1,38 @@
 -- =====================================================
--- RESET DE DATOS - PROYECTO IOT
--- Archivo: 03_reset_data.sql
+-- DATOS DE PRUEBA - PROYECTO IOT
+-- Archivo: 02_sample_data.sql
 -- MySQL 8.4.3 en Laragon
 -- =====================================================
--- Este script limpia todos los datos y recarga los datos de ejemplo.
--- ADVERTENCIA: Elimina TODOS los datos existentes.
--- Úsalo solo en desarrollo/pruebas, NUNCA en producción.
+-- Este archivo contiene datos de ejemplo para probar el sistema:
+-- - Dispositivo ESP32 de prueba
+-- - Lecturas históricas de sensores (últimas 2 horas)
+-- - Estados iniciales de actuadores
+-- - Consultas de verificación
 -- =====================================================
 
 USE iot_project;
 
 -- =====================================================
--- LIMPIEZA DE DATOS
+-- INSERCIÓN DE DATOS DE EJEMPLO
 -- =====================================================
 
-SET FOREIGN_KEY_CHECKS = 0;
-
--- Limpiar todas las tablas (preserva la estructura)
-TRUNCATE TABLE sensor_data;
-TRUNCATE TABLE actuator_state;
-TRUNCATE TABLE device;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-SELECT 'Datos eliminados correctamente' as status;
-
--- =====================================================
--- RECARGA DE DATOS DE EJEMPLO
--- =====================================================
+-- Limpiar datos existentes (opcional, solo para reiniciar)
+-- DELETE FROM sensor_data;
+-- DELETE FROM actuator_state;
+-- DELETE FROM device;
 
 -- Insertar dispositivo ESP32 de ejemplo
-INSERT INTO device (name, mac_address, ip_address, status, last_connection) VALUES
-('ESP32-Prototipo', 'AA:BB:CC:DD:EE:FF', '192.168.8.100', 'online', NOW());
+INSERT INTO device (name, mac_address, ip_address, status, is_enabled, last_connection) VALUES
+('ESP32-Prototipo', 'AA:BB:CC:DD:EE:FF', '192.168.8.100', 'online', TRUE, NOW());
 
 -- Obtener el ID del dispositivo insertado
 SET @device_id = LAST_INSERT_ID();
 
--- Lecturas de TEMPERATURA
+-- =====================================================
+-- DATOS DE SENSORES - ÚLTIMAS 2 HORAS
+-- =====================================================
+
+-- Lecturas de TEMPERATURA (cada 10 minutos)
 INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'temperature', 22.5, '°C', DATE_SUB(NOW(), INTERVAL 120 MINUTE)),
 (@device_id, 'temperature', 22.8, '°C', DATE_SUB(NOW(), INTERVAL 110 MINUTE)),
@@ -52,7 +48,7 @@ INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'temperature', 25.3, '°C', DATE_SUB(NOW(), INTERVAL 10 MINUTE)),
 (@device_id, 'temperature', 25.1, '°C', NOW());
 
--- Lecturas de HUMEDAD
+-- Lecturas de HUMEDAD (cada 10 minutos)
 INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'humidity', 68.0, '%', DATE_SUB(NOW(), INTERVAL 120 MINUTE)),
 (@device_id, 'humidity', 67.5, '%', DATE_SUB(NOW(), INTERVAL 110 MINUTE)),
@@ -68,7 +64,7 @@ INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'humidity', 63.8, '%', DATE_SUB(NOW(), INTERVAL 10 MINUTE)),
 (@device_id, 'humidity', 63.5, '%', NOW());
 
--- Lecturas de LUMINOSIDAD
+-- Lecturas de LUMINOSIDAD (cada 10 minutos)
 INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'light', 450.0, 'lux', DATE_SUB(NOW(), INTERVAL 120 MINUTE)),
 (@device_id, 'light', 520.0, 'lux', DATE_SUB(NOW(), INTERVAL 110 MINUTE)),
@@ -84,7 +80,10 @@ INSERT INTO sensor_data (device_id, sensor_type, value, unit, timestamp) VALUES
 (@device_id, 'light', 650.0, 'lux', DATE_SUB(NOW(), INTERVAL 10 MINUTE)),
 (@device_id, 'light', 580.0, 'lux', NOW());
 
--- Estados de ACTUADORES
+-- =====================================================
+-- ESTADOS INICIALES DE ACTUADORES
+-- =====================================================
+
 INSERT INTO actuator_state (device_id, actuator_type, state) VALUES
 (@device_id, 'led_red', 'OFF'),
 (@device_id, 'led_green', 'ON'),
@@ -93,12 +92,10 @@ INSERT INTO actuator_state (device_id, actuator_type, state) VALUES
 (@device_id, 'relay1', 'OFF');
 
 -- =====================================================
--- VERIFICACIÓN
+-- CONSULTAS DE VERIFICACIÓN
 -- =====================================================
 
--- Resumen
-SELECT 'Datos recargados correctamente' as status;
-
+-- Resumen de datos insertados
 SELECT 
     'Dispositivos' as tabla,
     COUNT(*) as registros
@@ -114,14 +111,67 @@ SELECT
     COUNT(*)
 FROM actuator_state;
 
--- Mostrar datos insertados
-SELECT 'DISPOSITIVO:' as info;
+-- Información del dispositivo
 SELECT * FROM device;
 
-SELECT 'ÚLTIMAS LECTURAS POR SENSOR:' as info;
+-- Últimas 5 lecturas de cada tipo de sensor
+SELECT 
+    sensor_type,
+    value,
+    unit,
+    timestamp
+FROM (
+    SELECT 
+        sensor_type,
+        value,
+        unit,
+        timestamp,
+        ROW_NUMBER() OVER (PARTITION BY sensor_type ORDER BY timestamp DESC) as rn
+    FROM sensor_data
+    WHERE device_id = @device_id
+) ranked
+WHERE rn <= 5
+ORDER BY sensor_type, timestamp DESC;
+
+-- Estado actual de todos los actuadores
+SELECT 
+    actuator_type,
+    state,
+    updated_at
+FROM actuator_state
+WHERE device_id = @device_id
+ORDER BY actuator_type;
+
+-- =====================================================
+-- CONSULTAS ÚTILES PARA DESARROLLO
+-- =====================================================
+
+-- Promedios de sensores en la última hora
+SELECT 
+    sensor_type,
+    COUNT(*) as num_readings,
+    AVG(value) as avg_value,
+    MIN(value) as min_value,
+    MAX(value) as max_value,
+    unit
+FROM sensor_data
+WHERE device_id = @device_id
+  AND timestamp >= DATE_SUB(NOW(), INTERVAL 1 HOUR)
+GROUP BY sensor_type, unit;
+
+-- Evolución de temperatura (últimas 10 lecturas)
+SELECT 
+    value as temperatura,
+    unit,
+    timestamp
+FROM sensor_data
+WHERE device_id = @device_id
+  AND sensor_type = 'temperature'
+ORDER BY timestamp DESC
+LIMIT 10;
+
+-- Prueba de procedimiento almacenado: obtener últimas lecturas
 CALL get_latest_readings(@device_id);
 
-SELECT 'ESTADO DE ACTUADORES:' as info;
-SELECT actuator_type, state, updated_at 
-FROM actuator_state 
-WHERE device_id = @device_id;
+-- Prueba de procedimiento almacenado: estadísticas de temperatura (última hora)
+CALL get_sensor_stats(@device_id, 'temperature', 1);

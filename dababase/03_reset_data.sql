@@ -30,8 +30,8 @@ SELECT 'Datos eliminados correctamente' as status;
 -- =====================================================
 
 -- Insertar dispositivo ESP32 de ejemplo
-INSERT INTO device (name, mac_address, ip_address, status, last_connection) VALUES
-('ESP32-Prototipo', 'AA:BB:CC:DD:EE:FF', '192.168.8.100', 'online', NOW());
+INSERT INTO device (name, mac_address, ip_address, status, is_enabled, last_connection) VALUES
+('ESP32-Prototipo', 'AA:BB:CC:DD:EE:FF', '192.168.8.100', 'online', TRUE, NOW());
 
 -- Obtener el ID del dispositivo insertado
 SET @device_id = LAST_INSERT_ID();

@@ -25,7 +25,8 @@ CREATE TABLE device (
     name VARCHAR(100) NOT NULL COMMENT 'Nombre descriptivo del dispositivo',
     mac_address VARCHAR(17) UNIQUE NOT NULL COMMENT 'Dirección MAC del ESP32',
     ip_address VARCHAR(15) COMMENT 'Dirección IP actual',
-    status ENUM('online', 'offline') DEFAULT 'offline' COMMENT 'Estado de conexión',
+    status ENUM('online', 'offline') DEFAULT 'offline' COMMENT 'Estado de conexión de red',
+    is_enabled BOOLEAN DEFAULT TRUE COMMENT 'Dispositivo habilitado administrativamente',
     last_connection TIMESTAMP NULL COMMENT 'Última vez que se conectó',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
