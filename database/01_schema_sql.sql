@@ -121,7 +121,7 @@ END$$
 DELIMITER ;
 
 -- Procedimiento para actualizar estado de dispositivo
-DELIMITER $$
+DELIMITER $
 CREATE PROCEDURE update_device_status(
     IN p_device_id BIGINT,
     IN p_status ENUM('online', 'offline')
@@ -133,7 +133,25 @@ BEGIN
     WHERE id = p_device_id;
     
     SELECT 'Estado actualizado correctamente' as result;
-END$$
+END$
+DELIMITER ;
+
+-- Procedimiento para habilitar/deshabilitar dispositivo administrativamente
+DELIMITER $
+CREATE PROCEDURE toggle_device_enabled(
+    IN p_device_id BIGINT,
+    IN p_is_enabled BOOLEAN
+)
+BEGIN
+    UPDATE device 
+    SET is_enabled = p_is_enabled,
+        updated_at = NOW()
+    WHERE id = p_device_id;
+    
+    SELECT CONCAT('Dispositivo ', 
+                  IF(p_is_enabled = TRUE, 'habilitado', 'deshabilitado'), 
+                  ' correctamente') as result;
+END$
 DELIMITER ;
 
 -- =====================================================
