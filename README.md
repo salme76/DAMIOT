@@ -4,13 +4,13 @@
 
 ---
 
-## 📋 Descripción
+## Descripción
 
 Solución IoT integral que permite la lectura de sensores (temperatura, humedad) y el control de actuadores (LEDs, motores) mediante comunicación eficiente MQTT y API REST. El sistema está compuesto por tres componentes principales que interactúan entre sí para ofrecer monitorización en tiempo real desde dispositivos móviles Android.
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 ```
 ┌─────────────┐      MQTT        ┌──────────────┐      REST API       ┌──────────────┐
@@ -27,13 +27,14 @@ Solución IoT integral que permite la lectura de sensores (temperatura, humedad)
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 DAMIOT/
 ├── esp32/              # Código Arduino para el microcontrolador ESP32
 ├── backend/            # API REST y cliente MQTT en Spring Boot
 ├── android/            # Aplicación móvil en Kotlin con Jetpack Compose
+├── database/           # Scripts SQL y documentación de base de datos
 ├── documentacion/      # Documentación del proyecto (memoria, manuales)
 ├── diagramas/          # Esquemas Fritzing y diagramas de flujo
 └── README.md           # Este archivo
@@ -41,9 +42,9 @@ DAMIOT/
 
 ---
 
-## 🧩 Componentes
+## Componentes
 
-### 1️⃣ **ESP32 (Dispositivo IoT)**
+### 1. ESP32 (Dispositivo IoT)
 - **Lenguaje**: C/C++ (Arduino IDE)
 - **Funciones**:
   - Lectura de sensores ambientales
@@ -51,7 +52,7 @@ DAMIOT/
   - Publicación de datos vía MQTT
   - Recepción de comandos remotos
 
-### 2️⃣ **Backend (Servidor)**
+### 2. Backend (Servidor)
 - **Lenguaje**: Java
 - **Framework**: Spring Boot
 - **Funciones**:
@@ -61,7 +62,7 @@ DAMIOT/
   - Broker MQTT (Mosquitto)
   - Almacenamiento de histórico de lecturas
 
-### 3️⃣ **App Android (Cliente Móvil)**
+### 3. App Android (Cliente Móvil)
 - **Lenguaje**: Kotlin
 - **Framework**: Jetpack Compose
 - **Funciones**:
@@ -72,7 +73,7 @@ DAMIOT/
 
 ---
 
-## 🔄 Flujo de Comunicación
+## Flujo de Comunicación
 
 1. **ESP32 → MQTT Broker → Backend**: El ESP32 publica datos de sensores
 2. **App Android → API REST → Backend**: La app consulta datos históricos
@@ -81,7 +82,7 @@ DAMIOT/
 
 ---
 
-## 🚀 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 | Componente | Tecnologías |
 |------------|-------------|
@@ -92,18 +93,18 @@ DAMIOT/
 
 ---
 
-## ✅ Características Principales
+## Características Principales
 
-- ✔️ Comunicación bidireccional en tiempo real sin polling
-- ✔️ Arquitectura escalable y modular
-- ✔️ Almacenamiento persistente de datos
-- ✔️ Interfaz móvil moderna y responsive
-- ✔️ Separación clara de responsabilidades (IoT, Backend, Frontend)
-- ✔️ Uso de protocolos estándar de la industria
+- Comunicación bidireccional en tiempo real sin polling
+- Arquitectura escalable y modular
+- Almacenamiento persistente de datos
+- Interfaz móvil moderna y responsive
+- Separación clara de responsabilidades (IoT, Backend, Frontend)
+- Uso de protocolos estándar de la industria
 
 ---
 
-## 📦 Requisitos Previos
+## Requisitos Previos
 
 ### Hardware
 - Placa ESP32 DevKit C
@@ -115,26 +116,33 @@ DAMIOT/
 - Arduino IDE 2.x
 - Java JDK 17+
 - Android Studio (última versión)
-- MySQL (Se ha usado la versión 8.4. que con Laragoon)
+- MySQL 8.4.3 (en Laragon)
 - Mosquitto MQTT Broker
 
 ---
 
-## 🛠️ Instalación y Configuración
+## Instalación y Configuración
 
-### 1. Backend
+### 1. Base de Datos
+```bash
+cd database
+mysql -u root < 01_schema.sql
+mysql -u root < 04_real_device.sql
+```
+
+### 2. Backend
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-### 2. ESP32
+### 3. ESP32
 1. Abrir Arduino IDE
 2. Cargar el sketch desde `esp32/codigo/`
 3. Configurar WiFi y servidor MQTT
 4. Subir código a la placa
 
-### 3. App Android
+### 4. App Android
 1. Abrir Android Studio
 2. Abrir el proyecto desde `android/`
 3. Sincronizar Gradle
@@ -142,13 +150,13 @@ cd backend
 
 ---
 
-## 📝 Estado del Proyecto
+## Estado del Proyecto
 
-🚧 **En desarrollo** - Proyecto para el módulo de Proyecto del CFGS DAM
+**En desarrollo** - Proyecto para el módulo de Proyecto del CFGS DAM
 
 ---
 
-## 👨‍💻 Autor
+## Autor
 
 **Emilio José Salmerón Arjona**  
 Ciclo Formativo de Grado Superior - Desarrollo de Aplicaciones Multiplataforma  
@@ -157,12 +165,12 @@ Curso 2024/2025
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto es parte de un trabajo académico para el IES Azarquiel.
 
 ---
 
-## 📞 Contacto
+## Contacto
 
 Para cualquier consulta sobre el proyecto, contactar a través de GitHub.
