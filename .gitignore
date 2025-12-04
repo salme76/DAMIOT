@@ -1,0 +1,138 @@
+# =====================================================
+# DAMIOT - Sistema IoT Multiplataforma
+# .gitignore
+# =====================================================
+
+# === ARCHIVOS SENSIBLES ===
+# NO SUBIR credenciales ni configuraciones locales
+*.env
+.env
+.env.local
+config_local.h
+secrets.properties
+
+# === ESP32 ===
+# Arduino IDE
+*.ino.bin
+*.ino.elf
+*.ino.map
+*.ino.eep
+*.ino.hex
+.DS_Store
+
+# === BASE DE DATOS ===
+# NO subir dumps de datos reales
+*.sql.backup
+dump.sql
+backup_*.sql
+
+# === BACKEND (Java/Spring Boot) ===
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.class
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Maven ###
+*.log
+*.tmp
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# === ANDROID ===
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# Android Studio
+*.iml
+.idea/
+.externalNativeBuild/
+.cxx/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services
+google-services.json
+
+# NDK
+obj/
+
+# === LOGS Y TEMPORALES ===
+*.log
+*.tmp
+*.swp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# === NODE_MODULES (si usas tools JS) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === HERRAMIENTAS DE DESARROLLO ===
+# Claude Code
+.claude/
+
+# === DOCUMENTACIÓN (temporal - no subir aún) ===
+# Carpetas con documentación en revisión
+documentacion/
+diagramas/
+*.pdf.tmp
+*.docx.tmp
+
+# === SISTEMA OPERATIVO ===
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory

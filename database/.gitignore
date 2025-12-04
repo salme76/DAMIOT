@@ -1,0 +1,6 @@
+# Ignorar backups
+*.sql.backup
+backup_*.sql
+
+# Ignorar dumps
+dump_*.sql

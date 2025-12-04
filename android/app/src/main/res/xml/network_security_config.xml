@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Permitir tráfico HTTP en desarrollo -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Emulador Android -->
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <!-- Red DAMIOT local -->
+        <domain includeSubdomains="true">192.168.8.1</domain>
+        <domain includeSubdomains="true">192.168.8.136</domain>
+        <!-- Localhost -->
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>
