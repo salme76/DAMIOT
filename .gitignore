@@ -67,6 +67,11 @@ build/
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
+# Archivos de bloqueo MQTT/TCP
+*.lck
+*tcp*/
+damiot-backend-tcp*/
+
 # === ANDROID ===
 # Gradle
 .gradle/
