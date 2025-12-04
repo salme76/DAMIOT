@@ -87,9 +87,18 @@ Android App → REST API → Backend → MQTT → ESP32
 - **Ubicación:** `esp32/damiot-esp32/`
 - **Lenguaje:** C++ (Arduino Framework)
 - **Hardware:** ESP32 DevKitC WROOM-32D
-- **Sensores:** DHT11 (temperatura/humedad), HC-SR04 (distancia), MQ-135 (CO₂)
-- **Actuadores:** LEDs, relés, servomotores
+- **Sensores implementados:** DHT11 (temperatura/humedad)
+- **Actuadores implementados:** LED azul
 - **Comunicación:** MQTT con topics dinámicos por MAC
+- **Nota:** Arquitectura extensible para otros sensores/actuadores
+
+**📝 Nota sobre dispositivos ficticios:**  
+El sistema incluye 3 dispositivos en la base de datos:
+- **ESP32-Salón:** Dispositivo REAL con DHT11 + LED azul
+- **ESP32-Jardín:** Dispositivo FICTICIO (datos de prueba en BD)
+- **ESP32-Garaje:** Dispositivo FICTICIO (datos de prueba en BD)
+
+Los dispositivos ficticios demuestran la capacidad multi-dispositivo del sistema y cómo se adaptaría el firmware para diferentes sensores/actuadores.
 
 ### 2. **Base de Datos**
 - **Ubicación:** `database/`
@@ -144,8 +153,9 @@ Android App → REST API → Backend → MQTT → ESP32
 ### Hardware
 - ESP32 DevKitC WROOM-32D
 - Sensor DHT11 (temperatura/humedad)
-- Opcional: HC-SR04 (distancia), MQ-135 (CO₂)
-- LEDs y resistencias
+- LED azul + resistencia 220Ω
+- Cables Dupont
+- Opcional: Breadboard
 - Router GLi.Net Mango (o router compatible)
 
 ### Software

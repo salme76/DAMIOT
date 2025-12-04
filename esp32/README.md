@@ -20,12 +20,20 @@ Firmware optimizado para dispositivos ESP32 en el sistema DAMIOT.
 ## 📖 Descripción
 
 Firmware v2.1 para ESP32 que implementa:
-- Lectura de sensores (DHT11, HC-SR04, MQ-135)
-- Control de actuadores (LEDs, relés, servos)
+- Lectura de sensores (DHT11 temperatura/humedad)
+- Control de actuadores (LED azul)
 - Comunicación MQTT con topics dinámicos por MAC
 - Heartbeat para monitoreo de conexión
 - Last Will & Testament (LWT)
 - Reconexión automática WiFi/MQTT
+- Arquitectura extensible para otros sensores/actuadores
+
+**📝 Nota importante:**  
+Este firmware está implementado y probado con:
+- ✅ **ESP32-Salón:** Dispositivo REAL con DHT11 + LED azul
+- ❌ **ESP32-Jardín y ESP32-Garaje:** Dispositivos FICTICIOS en BD (para demostración)
+
+Los dispositivos ficticios muestran cómo el firmware puede adaptarse para soportar diferentes sensores (HC-SR04, MQ-135, YL-69) y actuadores (relés, servos) modificando las secciones correspondientes.
 
 ### Versión Actual: 2.1
 
@@ -44,21 +52,23 @@ Firmware v2.1 para ESP32 que implementa:
 - **MAC:** 7C:9E:BD:F1:DA:E4 (ESP32-Salón)
 - **IP Asignada:** 192.168.8.130
 
-### Sensores Compatibles
-| Sensor | Pin | Tipo | Unidad |
-|--------|-----|------|--------|
-| DHT11 | GPIO4 | Temperatura/Humedad | °C / % |
-| HC-SR04 | GPIO18/19 | Distancia | cm |
-| MQ-135 | GPIO34 | CO₂ | ppm |
-| YL-69 | GPIO35 | Humedad Suelo | ADC |
+### Sensores Implementados
+| Sensor | Pin | Tipo | Unidad | Estado |
+|--------|-----|------|--------|--------|
+| DHT11 | GPIO4 | Temperatura/Humedad | °C / % | ✅ IMPLEMENTADO |
 
-### Actuadores Compatibles
-| Actuador | Pin | Tipo |
-|----------|-----|------|
-| LED Azul | GPIO5 | Digital |
-| LED Verde | GPIO25 | Digital |
-| Relé 1 | GPIO26 | Digital |
-| Servo | GPIO27 | PWM |
+### Actuadores Implementados
+| Actuador | Pin | Tipo | Estado |
+|----------|-----|------|--------|
+| LED Azul | GPIO5 | Digital | ✅ IMPLEMENTADO |
+
+### Hardware Adicional Soportado (requiere adaptación del firmware)
+El firmware base puede adaptarse fácilmente para:
+- HC-SR04 (distancia ultrasónica)
+- MQ-135 (calidad del aire/CO₂)
+- YL-69 (humedad del suelo)
+- Relés (control de dispositivos 220V)
+- Servomotores (control de posición)
 
 ---
 
