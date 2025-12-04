@@ -239,7 +239,7 @@ mvn spring-boot:run
 
 **Opción 2: JAR**
 ```bash
-java -jar target/damiot-backend-1.0.0.jar
+java -jar target/backend-1.0.0.jar
 ```
 
 **Opción 3: IntelliJ IDEA**
