@@ -135,7 +135,7 @@ Android App → REST API → Backend → MQTT → ESP32
 - ✅ Sin fragmentación de heap en ESP32 (buffers estáticos)
 - ✅ Temporización no bloqueante con `millis()`
 - ✅ Reconexión automática WiFi/MQTT
-- ✅ Pull-to-refresh en Android
+- ✅ Actualización automática de datos en Android
 
 ---
 

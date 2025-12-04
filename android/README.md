@@ -26,7 +26,7 @@ Aplicación Android nativa desarrollada en Kotlin con Jetpack Compose que permit
 - Controlar actuadores remotamente (LEDs, puertas, ventiladores)
 - Monitorear estado de dispositivos (online/offline)
 - Interfaz moderna con Material Design 3
-- Pull-to-refresh para actualizar datos
+- Actualización automática de datos
 
 ---
 
@@ -38,7 +38,7 @@ Aplicación Android nativa desarrollada en Kotlin con Jetpack Compose que permit
 - ✅ **Monitoreo de Sensores:** Temperatura, humedad, CO₂, distancia
 - ✅ **Control de Actuadores:** Switch ON/OFF para LEDs, relés, etc.
 - ✅ **Detección de Offline:** Indica visualmente dispositivos desconectados
-- ✅ **Actualización Manual:** Pull-to-refresh en todas las pantallas
+- ✅ **Actualización Automática:** Datos se refrescan cada 10 segundos (home) y 5 segundos (detalle)
 - ✅ **Iconos Personalizados:** Icono específico para cada sensor/actuador
 - ✅ **Modo Claro/Oscuro:** Soporta tema del sistema
 
@@ -271,14 +271,12 @@ Run → Run 'app'
 - Lista de dispositivos registrados
 - Estado online/offline visual
 - Resumen de sensores y actuadores
-- Pull-to-refresh
 - Actualización automática cada 10 segundos
 
 ### 3. Detail Screen
 - Información completa del dispositivo
 - Todas las lecturas de sensores
 - Controles de todos los actuadores
-- Pull-to-refresh
 - Actualización automática cada 5 segundos
 
 ### 4. Settings Screen
@@ -595,9 +593,8 @@ buildTypes {
 
 ### v2.0 (Diciembre 2025)
 - ✅ Material Design 3
-- ✅ Pull-to-refresh
+- ✅ Actualización automática de datos
 - ✅ Indicador visual offline
-- ✅ Actualización automática
 
 ### v1.0 (Noviembre 2025)
 - Versión inicial básica
