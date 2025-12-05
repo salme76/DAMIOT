@@ -115,16 +115,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# === HERRAMIENTAS DE DESARROLLO ===
-# Claude Code
-.claude/
-
-# === DOCUMENTACIÓN (temporal - no subir aún) ===
-# Carpetas con documentación en revisión
-documentacion/
-diagramas/
-*.pdf.tmp
-*.docx.tmp
 
 # === SISTEMA OPERATIVO ===
 # Windows

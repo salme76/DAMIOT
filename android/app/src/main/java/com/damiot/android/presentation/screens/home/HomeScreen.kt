@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
  * Funcionalidades:
  * - Lista de dispositivos activos
  * - Actualización manual con botón refresh
- * - Auto-refresh cada 30 segundos
+ * - Auto-refresh cada 10 segundos
  * - Menú con opciones de configuración y cambio de tema
  * 
  * @param onDeviceClick Callback al pulsar un dispositivo (navega a detalle)
