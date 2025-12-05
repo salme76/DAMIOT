@@ -1,5 +1,7 @@
 # DAMIOT - Sistema IoT Multiplataforma
 
+![Logotipo](./diagramas/files/esp32iot.png)
+
 ![Version](https://img.shields.io/badge/version-2.1-blue)
 ![Status](https://img.shields.io/badge/status-production--ready-green)
 ![License](https://img.shields.io/badge/license-Academic-orange)
