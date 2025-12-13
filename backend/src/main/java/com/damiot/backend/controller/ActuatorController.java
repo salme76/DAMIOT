@@ -2,10 +2,7 @@ package com.damiot.backend.controller;
 
 import com.damiot.backend.model.ActuatorEvent;
 import com.damiot.backend.model.ActuatorState;
-import com.damiot.backend.model.Device;
 import com.damiot.backend.service.ActuatorService;
-import com.damiot.backend.service.DeviceService;
-import com.damiot.backend.service.MqttService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Controlador REST para gestionar actuadores
@@ -21,7 +17,8 @@ import java.util.Optional;
  * Endpoints principales:
  * - GET /api/actuators/device/{deviceId} - Estados de actuadores de un dispositivo (Android)
  * - POST /api/actuators/command - Enviar comando a un actuador (Android)
- * - POST /api/actuators/led - Control de LED (endpoints legacy)
+ * - GET /api/actuators/history - Historial de eventos
+ * - GET /api/actuators/latest - Últimos eventos
  * 
  * @author Emilio José Salmerón Arjona
  * IES Azarquiel - Toledo
@@ -36,11 +33,6 @@ import java.util.Optional;
 public class ActuatorController {
 
     private final ActuatorService actuatorService;
-    private final MqttService mqttService;
-    private final DeviceService deviceService;
-    
-    // Device ID por defecto para endpoints legacy
-    private static final Long DEFAULT_DEVICE_ID = 1L;
 
     /**
      * GET /api/actuators/device/{deviceId}
@@ -101,168 +93,6 @@ public class ActuatorController {
         } catch (Exception e) {
             log.error("Error al enviar comando de actuador: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    /**
-     * POST /api/actuators/led
-     * Controlar el LED del ESP32
-     * Body: {"command": "ON"} o {"command": "OFF"}
-     * 
-     * Endpoint legacy que usa el dispositivo por defecto (ID=1)
-     */
-    @PostMapping("/led")
-    public ResponseEntity<Map<String, Object>> controlLed(
-            @RequestBody Map<String, String> request) {
-        String command = request.get("command");
-        log.info("POST /api/actuators/led - Command: {}", command);
-
-        try {
-            if (command == null || (!command.equals("ON") && !command.equals("OFF"))) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("error", "Command must be 'ON' or 'OFF'"));
-            }
-
-            // Obtener dispositivo por defecto
-            Optional<Device> deviceOpt = deviceService.getDeviceById(DEFAULT_DEVICE_ID);
-            if (deviceOpt.isEmpty()) {
-                return ResponseEntity.internalServerError()
-                        .body(Map.of("error", "Dispositivo por defecto no encontrado"));
-            }
-            
-            Device device = deviceOpt.get();
-            String macAddress = device.getMacAddress();
-
-            // Registrar evento en BD
-            ActuatorEvent event = actuatorService.createActuatorEvent("led_azul", command, DEFAULT_DEVICE_ID);
-
-            // Enviar comando MQTT con MAC
-            mqttService.sendLedCommand(macAddress, command);
-
-            Map<String, Object> response = Map.of(
-                    "success", true,
-                    "actuator", "led_azul",
-                    "command", command,
-                    "eventId", event.getId(),
-                    "deviceId", DEFAULT_DEVICE_ID,
-                    "message", "Comando enviado al LED"
-            );
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error al controlar LED: {}", e.getMessage());
-            return ResponseEntity.ok(Map.of(
-                    "success", false,
-                    "error", "Error al enviar comando: " + e.getMessage()
-            ));
-        }
-    }
-
-    /**
-     * POST /api/actuators/motor
-     * Controlar el motor del ESP32
-     * Body: {"command": "START"} o {"command": "STOP"} o {"command": "SPEED_50"}
-     * 
-     * Endpoint legacy que usa el dispositivo por defecto (ID=1)
-     */
-    @PostMapping("/motor")
-    public ResponseEntity<Map<String, Object>> controlMotor(
-            @RequestBody Map<String, String> request) {
-        String command = request.get("command");
-        log.info("POST /api/actuators/motor - Command: {}", command);
-
-        try {
-            if (command == null || command.isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("error", "Command is required"));
-            }
-
-            // Obtener dispositivo por defecto
-            Optional<Device> deviceOpt = deviceService.getDeviceById(DEFAULT_DEVICE_ID);
-            if (deviceOpt.isEmpty()) {
-                return ResponseEntity.internalServerError()
-                        .body(Map.of("error", "Dispositivo por defecto no encontrado"));
-            }
-            
-            Device device = deviceOpt.get();
-            String macAddress = device.getMacAddress();
-
-            // Registrar evento en BD
-            ActuatorEvent event = actuatorService.createActuatorEvent("motor", command, DEFAULT_DEVICE_ID);
-
-            // Enviar comando MQTT con MAC
-            mqttService.sendMotorCommand(macAddress, command);
-
-            Map<String, Object> response = Map.of(
-                    "success", true,
-                    "actuator", "motor",
-                    "command", command,
-                    "eventId", event.getId(),
-                    "deviceId", DEFAULT_DEVICE_ID,
-                    "message", "Comando enviado al motor"
-            );
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error al controlar motor: {}", e.getMessage());
-            return ResponseEntity.ok(Map.of(
-                    "success", false,
-                    "error", "Error al enviar comando: " + e.getMessage()
-            ));
-        }
-    }
-
-    /**
-     * POST /api/actuators/{actuatorType}
-     * Endpoint genérico para cualquier actuador
-     * 
-     * Endpoint legacy que usa el dispositivo por defecto (ID=1)
-     */
-    @PostMapping("/{actuatorType}")
-    public ResponseEntity<Map<String, Object>> controlActuator(
-            @PathVariable String actuatorType,
-            @RequestBody Map<String, String> request) {
-        String command = request.get("command");
-        log.info("POST /api/actuators/{} - Command: {}", actuatorType, command);
-
-        try {
-            if (command == null || command.isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(Map.of("error", "Command is required"));
-            }
-
-            // Obtener dispositivo por defecto
-            Optional<Device> deviceOpt = deviceService.getDeviceById(DEFAULT_DEVICE_ID);
-            if (deviceOpt.isEmpty()) {
-                return ResponseEntity.internalServerError()
-                        .body(Map.of("error", "Dispositivo por defecto no encontrado"));
-            }
-            
-            Device device = deviceOpt.get();
-            String macAddress = device.getMacAddress();
-
-            // Registrar evento en BD
-            ActuatorEvent event = actuatorService.createActuatorEvent(actuatorType, command, DEFAULT_DEVICE_ID);
-
-            // Enviar comando MQTT con MAC
-            mqttService.sendActuatorCommand(macAddress, actuatorType, command);
-
-            Map<String, Object> response = Map.of(
-                    "success", true,
-                    "actuator", actuatorType,
-                    "command", command,
-                    "eventId", event.getId(),
-                    "deviceId", DEFAULT_DEVICE_ID,
-                    "message", "Comando enviado"
-            );
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error al controlar {}: {}", actuatorType, e.getMessage());
-            return ResponseEntity.ok(Map.of(
-                    "success", false,
-                    "error", "Error al enviar comando: " + e.getMessage()
-            ));
         }
     }
 

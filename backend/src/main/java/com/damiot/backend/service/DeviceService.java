@@ -110,7 +110,7 @@ public class DeviceService {
                 deviceRepository.save(device);
                 log.debug("💓 Heartbeat recibido de: {} ({})", device.getName(), macAddress);
             } else {
-                // Auto-registro de dispositivos nuevos (opcional)
+                // Dispositivo no registrado en BD - ignorar heartbeat
                 log.warn("💓 Heartbeat de dispositivo desconocido: {} (IP: {})", macAddress, ipAddress);
             }
             markDatabaseAvailable();

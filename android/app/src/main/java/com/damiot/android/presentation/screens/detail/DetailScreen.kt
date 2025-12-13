@@ -187,7 +187,7 @@ fun DetailScreen(
                                 )
                             }
                         } else {
-                            items(uiState.sensorReadings.values.toList()) { reading ->
+                            items(uiState.sensorReadings.values.sortedBy { it.sensorType }) { reading ->
                                 SensorCard(
                                     sensorReading = reading,
                                     isDeviceOnline = isDeviceOnline

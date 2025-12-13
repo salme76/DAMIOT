@@ -28,7 +28,7 @@ USE damiot_db;
 
 -- Insertar ESP32-Salón
 INSERT INTO device (name, mac_address, ip_address, status, is_enabled, last_connection) VALUES
-('ESP32-Salón', '7C:9E:BD:F1:DA:E4', '192.168.8.130', 'offline', TRUE, NULL)
+('ESP32-Salón', '7C:9E:BD:F1:DA:E4', '192.168.8.130', 'offline', TRUE, NOW())
 ON DUPLICATE KEY UPDATE 
     name = 'ESP32-Salón',
     ip_address = '192.168.8.130',
