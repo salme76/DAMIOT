@@ -66,12 +66,12 @@ INSERT INTO actuator_events (device_id, actuator_type, command, status, timestam
 SELECT CONCAT('✅ Historial de eventos de ESP32-Salón insertado') as info;
 
 -- =====================================================
--- DISPOSITIVO 2: ESP32-JARDÍN (FICTICIO - DESHABILITADO)
+-- DISPOSITIVO 2: ESP32-JARDÍN (FICTICIO - HABILITADO Y FORZADO ONLINE (last_conection NULL)
 -- =====================================================
 
 -- Insertar ESP32-Jardín
 INSERT INTO device (name, mac_address, ip_address, status, is_enabled, last_connection) VALUES
-('ESP32-Jardín', 'AA:BB:CC:DD:EE:FF', '192.168.8.131', 'offline', FALSE, NULL)
+('ESP32-Jardín', 'AA:BB:CC:DD:EE:FF', '192.168.8.131', 'online', TRUE, NULL)
 ON DUPLICATE KEY UPDATE 
     name = 'ESP32-Jardín',
     ip_address = '192.168.8.131',
@@ -112,12 +112,12 @@ INSERT INTO actuator_events (device_id, actuator_type, command, status, timestam
 SELECT CONCAT('✅ Historial de eventos de ESP32-Jardín insertado') as info;
 
 -- =====================================================
--- DISPOSITIVO 3: ESP32-GARAJE (FICTICIO)
+-- DISPOSITIVO 3: ESP32-GARAJE (FICTICIO) OFFLINE Y DESHABILITADO
 -- =====================================================
 
 -- Insertar ESP32-Garaje
 INSERT INTO device (name, mac_address, ip_address, status, is_enabled, last_connection) VALUES
-('ESP32-Garaje', 'B8:27:EB:AA:BB:CC', '192.168.8.133', 'online', TRUE, NOW())
+('ESP32-Garaje', 'B8:27:EB:AA:BB:CC', '192.168.8.133', 'offline', FALSE, NOW())
 ON DUPLICATE KEY UPDATE 
     name = 'ESP32-Garaje',
     ip_address = '192.168.8.133',
