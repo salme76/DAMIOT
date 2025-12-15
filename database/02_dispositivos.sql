@@ -1,4 +1,4 @@
--- =====================================================
+-- actuator_state-- =====================================================
 -- DISPOSITIVOS - PROYECTO DAMIOT
 -- Archivo: 02_dispositivos.sql
 -- Autor: Emilio José Salmerón Arjona
